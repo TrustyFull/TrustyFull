@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TRUSTY FULL — Фулфилмент для маркетплейсов</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root { --black: #0e0e0e; --white: #f5f3ee; --accent: #e8521a; --accent-dark: #b83e10; --gray: #8a8780; --card-bg: #1a1a18; --border: rgba(245,243,238,0.12); }
+  html { scroll-behavior: smooth; }
+  body { background: var(--black); color: var(--white); font-family: 'Manrope', sans-serif; font-size: 16px; line-height: 1.6; overflow-x: hidden; }
+  a { color: inherit; text-decoration: none; }
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 1.2rem 3rem; background: rgba(14,14,14,0.92); backdrop-filter: blur(10px); border-bottom: 0.5px solid var(--border); }
+  .logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem; letter-spacing: 0.08em; }
+  .logo span { color: var(--accent); }
+  .nav-links { display: flex; gap: 1.5rem; font-size: 0.82rem; font-weight: 500; color: var(--gray); }
+  .nav-links a:hover { color: var(--white); }
+  .nav-cta { background: var(--accent); color: var(--white); padding: 0.55rem 1.4rem; border-radius: 4px; font-size: 0.85rem; font-weight: 600; transition: background 0.2s; }
+  .nav-cta:hover { background: var(--accent-dark); }
+  .hero { min-height: 100vh; display: grid; grid-template-columns: 1fr 1fr; align-items: center; padding: 8rem 3rem 4rem; gap: 4rem; position: relative; overflow: hidden; }
+  .hero::before { content: ''; position: absolute; top: -20%; right: -10%; width: 600px; height: 600px; background: radial-gradient(circle, rgba(232,82,26,0.15) 0%, transparent 70%); pointer-events: none; }
+  .hero-badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(232,82,26,0.15); border: 0.5px solid rgba(232,82,26,0.4); color: #f07040; padding: 0.4rem 1rem; border-radius: 100px; font-size: 0.8rem; font-weight: 600; letter-spacing: 0.05em; margin-bottom: 1.5rem; }
+  .badge-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+  .hero h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(3.5rem, 6vw, 5.5rem); line-height: 0.95; letter-spacing: 0.02em; margin-bottom: 1.5rem; }
+  .hero h1 .accent { color: var(--accent); }
+  .hero-desc { font-size: 1.05rem; color: rgba(245,243,238,0.7); line-height: 1.7; margin-bottom: 2rem; max-width: 480px; }
+  .hero-actions { display: flex; align-items: center; gap: 1.2rem; flex-wrap: wrap; }
+  .btn-primary { background: var(--accent); color: var(--white); padding: 0.85rem 2rem; border-radius: 4px; font-weight: 600; font-size: 0.95rem; transition: background 0.2s, transform 0.15s; display: inline-block; cursor: pointer; border: none; font-family: 'Manrope', sans-serif; }
+  .btn-primary:hover { background: var(--accent-dark); transform: translateY(-1px); }
+  .btn-ghost { border: 0.5px solid rgba(245,243,238,0.3); color: var(--white); padding: 0.85rem 2rem; border-radius: 4px; font-weight: 500; font-size: 0.95rem; transition: border-color 0.2s, background 0.2s; }
+  .btn-ghost:hover { border-color: var(--white); background: rgba(245,243,238,0.06); }
+  .hero-discount { margin-top: 1.2rem; display: inline-flex; align-items: center; gap: 10px; background: rgba(245,243,238,0.06); border: 0.5px solid rgba(245,243,238,0.15); padding: 0.7rem 1.2rem; border-radius: 4px; font-size: 0.9rem; }
+  .hero-discount .tag { background: var(--accent); color: var(--white); font-size: 0.75rem; font-weight: 700; padding: 2px 8px; border-radius: 3px; }
+  .hero-stats { display: flex; flex-direction: column; gap: 1.2rem; }
+  .stat-card { background: var(--card-bg); border: 0.5px solid var(--border); border-radius: 8px; padding: 1.5rem 1.8rem; position: relative; overflow: hidden; }
+  .stat-card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--accent); }
+  .stat-num { font-family: 'Bebas Neue', sans-serif; font-size: 2.4rem; line-height: 1; color: var(--white); }
+  .stat-num span { color: var(--accent); }
+  .stat-label { font-size: 0.82rem; color: var(--gray); margin-top: 0.3rem; line-height: 1.4; }
+  section { padding: 6rem 3rem; }
+  .section-tag { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.12em; color: var(--accent); text-transform: uppercase; margin-bottom: 1rem; }
+  .section-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2.2rem, 4vw, 3.5rem); line-height: 0.95; letter-spacing: 0.02em; margin-bottom: 1.5rem; }
+  .section-sub { color: rgba(245,243,238,0.6); max-width: 560px; font-size: 1rem; line-height: 1.7; }
+  .forwho-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-top: 3rem; }
+  .forwho-card { background: var(--card-bg); border: 0.5px solid var(--border); border-radius: 10px; padding: 2rem; transition: border-color 0.2s; }
+  .forwho-card:hover { border-color: rgba(232,82,26,0.4); }
+  .forwho-who { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.8rem; }
+  .forwho-card h3 { font-size: 1.05rem; font-weight: 600; margin-bottom: 0.8rem; }
+  .forwho-card ul { list-style: none; }
+  .forwho-card ul li { font-size: 0.85rem; color: var(--gray); padding: 0.3rem 0; border-bottom: 0.5px solid var(--border); }
+  .forwho-card ul li:last-child { border-bottom: none; }
+  .forwho-card ul li::before { content: '→ '; color: var(--accent); }
+  .utp-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); border: 0.5px solid var(--border); border-radius: 8px; overflow: hidden; margin-top: 3rem; }
+  .utp-card { background: var(--card-bg); padding: 2.2rem 1.8rem; transition: background 0.2s; }
+  .utp-card:hover { background: #222220; }
+  .utp-icon { width: 44px; height: 44px; border-radius: 6px; background: rgba(232,82,26,0.15); display: flex; align-items: center; justify-content: center; margin-bottom: 1.2rem; font-size: 1.4rem; }
+  .utp-card h3 { font-size: 1rem; font-weight: 600; margin-bottom: 0.6rem; }
+  .utp-card p { font-size: 0.85rem; color: var(--gray); line-height: 1.6; }
+  .vacuum-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; margin-top: 3rem; }
+  .vacuum-visual { background: var(--card-bg); border: 0.5px solid var(--border); border-radius: 10px; padding: 2.5rem; }
+  .vacuum-compare { display: grid; grid-template-columns: 1fr auto 1fr; gap: 1rem; align-items: center; text-align: center; }
+  .vacuum-box { background: rgba(245,243,238,0.04); border: 0.5px solid var(--border); border-radius: 8px; padding: 1.5rem 1rem; }
+  .vacuum-box .vlabel { font-size: 0.72rem; color: var(--gray); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 0.5rem; }
+  .vacuum-box .vsize { font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem; color: var(--white); }
+  .vacuum-box .vcost { font-size: 0.78rem; color: var(--gray); margin-top: 0.3rem; }
+  .vacuum-box.after .vsize { color: var(--accent); }
+  .vacuum-box.after { border-color: rgba(232,82,26,0.3); background: rgba(232,82,26,0.05); }
+  .vacuum-arrow { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; color: var(--accent); }
+  .vacuum-saving { margin-top: 1.5rem; text-align: center; background: rgba(232,82,26,0.1); border: 0.5px solid rgba(232,82,26,0.3); border-radius: 6px; padding: 1rem; }
+  .vacuum-saving .big { font-family: 'Bebas Neue', sans-serif; font-size: 2.5rem; color: var(--accent); }
+  .vacuum-saving .small { font-size: 0.8rem; color: var(--gray); }
+  .vacuum-points { display: flex; flex-direction: column; gap: 1.2rem; }
+  .vacuum-point { display: flex; gap: 1rem; align-items: flex-start; }
+  .vacuum-point-icon { width: 36px; height: 36px; border-radius: 6px; background: rgba(232,82,26,0.12); flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 1rem; }
+  .vacuum-point h4 { font-size: 0.9rem; font-weight: 600; margin-bottom: 0.2rem; }
+  .vacuum-point p { font-size: 0.82rem; color: var(--gray); line-height: 1.5; }
+  .calc-inner { background: var(--card-bg); border: 0.5px solid var(--border); border-radius: 12px; padding: 2.5rem; margin-top: 3rem; }
+  .calc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; }
+  .calc-field { margin-bottom: 1.5rem; }
+  .calc-field label { display: block; font-size: 0.78rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--gray); margin-bottom: 0.5rem; }
+  .calc-field input, .calc-field select { width: 100%; background: rgba(245,243,238,0.05); border: 0.5px solid var(--border); color: var(--white); padding: 0.75rem 1rem; border-radius: 6px; font-family: 'Manrope', sans-serif; font-size: 0.95rem; outline: none; transition: border-color 0.2s; }
+  .calc-field input:focus, .calc-field select:focus { border-color: var(--accent); }
+  .calc-field select option { background: #1a1a18; }
+  .calc-hint { font-size: 0.75rem; color: var(--gray); margin-top: 0.35rem; }
+  .calc-results { background: rgba(232,82,26,0.06); border: 0.5px solid rgba(232,82,26,0.2); border-radius: 10px; padding: 2rem; }
+  .calc-results h3 { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; margin-bottom: 1.5rem; }
+  .calc-line { display: flex; justify-content: space-between; align-items: center; padding: 0.7rem 0; border-bottom: 0.5px solid var(--border); font-size: 0.88rem; }
+  .calc-line:last-of-type { border-bottom: none; }
+  .calc-line .name { color: var(--gray); }
+  .calc-line .val { font-weight: 600; }
+  .calc-total { margin-top: 1.2rem; padding-top: 1.2rem; border-top: 0.5px solid rgba(232,82,26,0.3); display: flex; justify-content: space-between; align-items: baseline; }
+  .calc-total .tlabel { font-size: 0.85rem; color: var(--gray); }
+  .calc-total .tval { font-family: 'Bebas Neue', sans-serif; font-size: 2.5rem; color: var(--accent); }
+  .calc-note { font-size: 0.75rem; color: var(--gray); margin-top: 0.8rem; line-height: 1.5; }
+  .price-table { width: 100%; border-collapse: collapse; margin-top: 3rem; font-size: 0.9rem; }
+  .price-table thead tr { background: rgba(232,82,26,0.1); border-bottom: 0.5px solid rgba(232,82,26,0.3); }
+  .price-table th { text-align: left; padding: 1rem 1.2rem; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.08em; color: var(--accent); text-transform: uppercase; }
+  .price-table td { padding: 0.9rem 1.2rem; border-bottom: 0.5px solid var(--border); color: rgba(245,243,238,0.85); }
+  .price-table tr:hover td { background: rgba(245,243,238,0.03); }
+  .price-table .price-val { font-weight: 700; color: var(--white); }
+  .price-table .section-row td { background: var(--card-bg); color: var(--gray); font-size: 0.72rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.7rem 1.2rem; }
+  .vs-badge { display: inline-flex; align-items: center; background: rgba(34,197,94,0.15); color: #4ade80; font-size: 0.72rem; font-weight: 700; padding: 2px 8px; border-radius: 3px; }
+  .highlight-row td { background: rgba(232,82,26,0.07); }
+  .steps { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0; margin-top: 3rem; position: relative; }
+  .steps::before { content: ''; position: absolute; top: 30px; left: 12%; right: 12%; height: 0.5px; background: var(--border); }
+  .step { text-align: center; padding: 0 1rem; }
+  .step-num { width: 60px; height: 60px; border-radius: 50%; background: var(--card-bg); border: 0.5px solid var(--border); display: flex; align-items: center; justify-content: center; margin: 0 auto 1.2rem; font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; color: var(--accent); position: relative; z-index: 1; }
+  .step h4 { font-size: 0.85rem; font-weight: 600; margin-bottom: 0.4rem; }
+  .step p { font-size: 0.78rem; color: var(--gray); line-height: 1.5; }
+  .whowe-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; margin-top: 3rem; }
+  .whowe-text p { font-size: 1rem; color: rgba(245,243,238,0.75); line-height: 1.8; margin-bottom: 1.2rem; }
+  .founder-card { display: flex; gap: 1.2rem; align-items: center; margin-top: 2rem; background: rgba(245,243,238,0.04); border: 0.5px solid var(--border); border-radius: 8px; padding: 1.2rem 1.5rem; }
+  .founder-avatar { width: 52px; height: 52px; border-radius: 50%; background: rgba(232,82,26,0.2); flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; color: var(--accent); }
+  .founder-name { font-weight: 600; font-size: 0.95rem; }
+  .founder-role { font-size: 0.8rem; color: var(--gray); margin-top: 2px; }
+  .whowe-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .whowe-stat { background: rgba(245,243,238,0.04); border: 0.5px solid var(--border); border-radius: 8px; padding: 1.5rem; }
+  .whowe-stat .num { font-family: 'Bebas Neue', sans-serif; font-size: 2.2rem; color: var(--accent); line-height: 1; }
+  .whowe-stat .lbl { font-size: 0.8rem; color: var(--gray); margin-top: 0.3rem; line-height: 1.4; }
+  .faq-list { margin-top: 3rem; border: 0.5px solid var(--border); border-radius: 10px; overflow: hidden; }
+  .faq-item { border-bottom: 0.5px solid var(--border); }
+  .faq-item:last-child { border-bottom: none; }
+  .faq-q { display: flex; justify-content: space-between; align-items: center; padding: 1.3rem 1.8rem; cursor: pointer; font-weight: 600; font-size: 0.95rem; background: var(--card-bg); transition: background 0.2s; user-select: none; }
+  .faq-q:hover { background: #222220; }
+  .faq-icon { font-size: 1.2rem; color: var(--accent); flex-shrink: 0; margin-left: 1rem; transition: transform 0.2s; }
+  .faq-a { display: none; padding: 1.2rem 1.8rem; font-size: 0.9rem; color: rgba(245,243,238,0.7); line-height: 1.7; background: rgba(245,243,238,0.02); }
+  .faq-item.open .faq-a { display: block; }
+  .faq-item.open .faq-icon { transform: rotate(45deg); }
+  .contacts-section { background: var(--card-bg); border-top: 0.5px solid var(--border); }
+  .contacts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; margin-top: 3rem; }
+  .contact-item { display: flex; gap: 1rem; align-items: flex-start; margin-bottom: 1.5rem; }
+  .contact-icon { width: 40px; height: 40px; border-radius: 6px; background: rgba(232,82,26,0.12); flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; }
+  .contact-label { font-size: 0.75rem; color: var(--gray); margin-bottom: 2px; }
+  .contact-val { font-weight: 600; font-size: 0.95rem; }
+  .lead-form { background: rgba(232,82,26,0.06); border: 0.5px solid rgba(232,82,26,0.2); border-radius: 10px; padding: 2.5rem; }
+  .lead-form h3 { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; margin-bottom: 0.5rem; }
+  .lead-form p { font-size: 0.88rem; color: rgba(245,243,238,0.6); margin-bottom: 1.8rem; }
+  .form-field { margin-bottom: 1rem; }
+  .form-field input { width: 100%; background: rgba(245,243,238,0.06); border: 0.5px solid var(--border); color: var(--white); padding: 0.8rem 1rem; border-radius: 6px; font-family: 'Manrope', sans-serif; font-size: 0.95rem; outline: none; transition: border-color 0.2s; }
+  .form-field input:focus { border-color: var(--accent); }
+  .form-field input::placeholder { color: var(--gray); }
+  .form-success { display: none; text-align: center; padding: 1.5rem; background: rgba(34,197,94,0.1); border: 0.5px solid rgba(34,197,94,0.3); border-radius: 6px; color: #4ade80; font-weight: 600; }
+  .form-privacy { font-size: 0.72rem; color: var(--gray); margin-top: 0.8rem; line-height: 1.5; }
+  footer { border-top: 0.5px solid var(--border); padding: 2rem 3rem; display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; color: var(--gray); }
+  @media (max-width: 900px) {
+    nav { padding: 1rem 1.5rem; } .nav-links { display: none; }
+    .hero { grid-template-columns: 1fr; padding: 7rem 1.5rem 3rem; }
+    .forwho-grid, .utp-grid, .calc-grid, .vacuum-inner, .whowe-inner, .contacts-grid { grid-template-columns: 1fr; gap: 2rem; }
+    .utp-grid { gap: 1px; }
+    .steps { grid-template-columns: repeat(2, 1fr); gap: 2rem; } .steps::before { display: none; }
+    section { padding: 4rem 1.5rem; } .whowe-stats { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">TRUSTY<span>.</span>FULL</div>
+  <div class="nav-links">
+    <a href="#forwho">Для кого</a>
+    <a href="#utp">Преимущества</a>
+    <a href="#calc">Калькулятор</a>
+    <a href="#pricing">Цены</a>
+    <a href="#faq">FAQ</a>
+    <a href="#contacts">Контакты</a>
+  </div>
+  <a href="https://t.me/TrustyFull" class="nav-cta">Написать в Telegram</a>
+</nav>
+
+<section class="hero">
+  <div>
+    <div class="hero-badge"><div class="badge-dot"></div>30 секунд до склада Ozon</div>
+    <h1>Фулфилмент<br>для <span class="accent">Ozon</span><br>и <span class="accent">Wildberries</span></h1>
+    <p class="hero-desc">Принимаем, храним, упаковываем и отгружаем ваш товар. Склад в Москве рядом с сортировочным центром Ozon — кросс-докинг от 1 000 ₽/паллета.</p>
+    <div class="hero-actions">
+      <a href="#contacts" class="btn-primary">Оставить заявку</a>
+      <a href="#calc" class="btn-ghost">Рассчитать стоимость</a>
+    </div>
+    <div class="hero-discount"><span class="tag">-30%</span>Скидка на первую отгрузку</div>
+  </div>
+  <div class="hero-stats">
+    <div class="stat-card"><div class="stat-num">100 000<span>+</span></div><div class="stat-label">единиц товара уже отгружено на Ozon и Wildberries</div></div>
+    <div class="stat-card"><div class="stat-num">100<span>%</span></div><div class="stat-label">паллет сданы без возвратов — фиксируем каждую на видео</div></div>
+    <div class="stat-card"><div class="stat-num">0</div><div class="stat-label">потерянных отправлений с первого дня работы</div></div>
+  </div>
+</section>
+
+<section id="forwho" style="background:#080808;">
+  <div class="section-tag">Для кого</div>
+  <h2 class="section-title">Найдите себя</h2>
+  <p class="section-sub">Работаем с разными форматами бизнеса — выберите ваш.</p>
+  <div class="forwho-grid">
+    <div class="forwho-card">
+      <div class="forwho-who">Маркетплейс Ozon</div>
+      <h3>Продаёте на Ozon</h3>
+      <ul>
+        <li>FBO — отгрузка на склад Ozon</li>
+        <li>FBS — сборка и отправка заказов</li>
+        <li>Кросс-докинг от 1 000 ₽/паллета</li>
+        <li>Маркировка по требованиям Ozon</li>
+        <li>Создание поставок в ЛК</li>
+      </ul>
+    </div>
+    <div class="forwho-card">
+      <div class="forwho-who">Маркетплейс Wildberries</div>
+      <h3>Продаёте на Wildberries</h3>
+      <ul>
+        <li>FBO — отгрузка на склады WB</li>
+        <li>FBS — сборка под каждый заказ</li>
+        <li>Доставка на Коледино, Электросталь, регионы</li>
+        <li>Маркировка и упаковка по стандартам WB</li>
+        <li>Вакуумная упаковка текстиля</li>
+      </ul>
+    </div>
+    <div class="forwho-card">
+      <div class="forwho-who">Интернет-магазин</div>
+      <h3>Интернет-магазин в розницу</h3>
+      <ul>
+        <li>Хранение товарного запаса</li>
+        <li>Сборка розничных заказов</li>
+        <li>Упаковка и маркировка</li>
+        <li>Отправка через транспортные компании</li>
+        <li>Работаем в белую, полный пакет документов</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="utp">
+  <div class="section-tag">Почему мы</div>
+  <h2 class="section-title">Ваши деньги<br>остаются у вас</h2>
+  <p class="section-sub">Мы не просто склад — выбираем расположение, оборудование и процессы так, чтобы каждая паллета обходилась вам дешевле.</p>
+  <div class="utp-grid">
+    <div class="utp-card"><div class="utp-icon">⚡</div><h3>30 секунд до Ozon</h3><p>Кросс-докинг в СЦ Ozon от 1 000 ₽/паллета. Конкуренты берут 3 600–7 000 ₽. Ваша экономия — до 4 400 ₽ с паллеты.</p></div>
+    <div class="utp-card"><div class="utp-icon">🗜️</div><h3>Вакуумный пресс</h3><p>Уменьшаем объём текстиля до 6 раз. Экономия на хранении, упаковке и логистике — сразу по всем статьям.</p></div>
+    <div class="utp-card"><div class="utp-icon">📋</div><h3>Работаем в белую</h3><p>Официальный договор, полный пакет закрывающих документов. Подходит для ИП и ООО на любом режиме.</p></div>
+    <div class="utp-card"><div class="utp-icon">📦</div><h3>Ozon, WB и интернет-магазины</h3><p>FBO и FBS на двух крупнейших маркетплейсах. Плюс розничная сборка для интернет-магазинов.</p></div>
+    <div class="utp-card"><div class="utp-icon">🎥</div><h3>Видеофиксация каждой приёмки</h3><p>Камеры фиксируют состояние товара при поступлении и отгрузке. Вопрос — покажем запись.</p></div>
+    <div class="utp-card"><div class="utp-icon">📸</div><h3>Фото товара на складе</h3><p>Съёмка для карточек маркетплейса прямо на складе — 300 ₽/артикул. Не нужно забирать товар.</p></div>
+  </div>
+</section>
+
+<section style="background:#080808;">
+  <div class="section-tag">Уникально</div>
+  <h2 class="section-title">Вакуумная упаковка —<br>экономия до <span style="color:var(--accent);">6 раз</span></h2>
+  <p class="section-sub">Профессиональный вакуумный пресс для текстиля. Меньше объём — меньше платите за хранение и логистику.</p>
+  <div class="vacuum-inner">
+    <div class="vacuum-points">
+      <div class="vacuum-point"><div class="vacuum-point-icon">🚚</div><div><h4>Больше товара на паллете — меньше паллет</h4><p>Вакуум сжимает объём до 6 раз. На одну паллету влезает в 3–5 раз больше единиц. Меньше паллет = меньше рейсов = прямая экономия на логистике до маркетплейса.</p></div></div>
+      <div class="vacuum-point"><div class="vacuum-point-icon">💰</div><div><h4>Считаем экономию конкретно под вас</h4><p>Назовите артикул и объём — посчитаем сколько паллет вы отправляете сейчас и сколько будете после вакуума. Разница — ваша экономия с каждой поставки.</p></div></div>
+      <div class="vacuum-point"><div class="vacuum-point-icon">👕</div><div><h4>Идеально для одежды и текстиля</h4><p>Куртки, пуховики, постельное бельё, подушки — всё что занимает много места, сжимается без ущерба для товара.</p></div></div>
+      <div class="vacuum-point"><div class="vacuum-point-icon">⚡</div><div><h4>Только у нас в Москве</h4><p>Профессиональный вакуумный пресс прямо на складе. Не нужно везти товар в другое место — делаем всё в одном месте.</p></div></div>
+    </div>
+    <div class="vacuum-visual">
+      <div style="font-size:0.75rem;color:var(--gray);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:1.2rem;">Пример: пуховики, 100 единиц, поставка на WB Коледино</div>
+      <div class="vacuum-compare">
+        <div class="vacuum-box"><div class="vlabel">Без вакуума</div><div class="vsize">8 паллет</div><div class="vcost">8 × 3 000 ₽ = 24 000 ₽</div></div>
+        <div class="vacuum-arrow">→</div>
+        <div class="vacuum-box after"><div class="vlabel">После вакуума</div><div class="vsize">2 паллеты</div><div class="vcost" style="color:#f07040;">2 × 3 000 ₽ = 6 000 ₽</div></div>
+      </div>
+      <div class="vacuum-saving">
+        <div class="big">−18 000 ₽</div>
+        <div class="small">экономия на одной поставке<br>при 10 поставках в год — это 180 000 ₽</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="calc">
+  <div class="section-tag">Калькулятор</div>
+  <h2 class="section-title">Рассчитайте стоимость</h2>
+  <p class="section-sub">Введите параметры вашего товара — получите примерную стоимость за один цикл.</p>
+  <div class="calc-inner">
+    <div class="calc-grid">
+      <div>
+        <div class="calc-field"><label>Количество единиц товара</label><input type="number" id="qty" value="500" min="100"><div class="calc-hint">Минимум — 100 штук</div></div>
+        <div class="calc-field"><label>Объём одной единицы (литры)</label><input type="number" id="vol" value="2" min="0.1" step="0.1"><div class="calc-hint">Объём = Д × Ш × В (см) ÷ 1000</div></div>
+        <div class="calc-field"><label>Маркетплейс</label>
+          <select id="mp">
+            <optgroup label="Ozon">
+              <option value="ozon_cross">Ozon — кросс-докинг СЦ (наш склад)</option>
+              <option value="ozon_dom">Ozon — РФЦ Домодедово / Ногинск / Гривно</option>
+              <option value="ozon_zhuk">Ozon — РФЦ Жуковский / Пушкино</option>
+              <option value="ozon_hor">Ozon — Хоругвино</option>
+            </optgroup>
+            <optgroup label="Wildberries">
+              <option value="wb_kol">WB — Коледино / Электросталь</option>
+              <option value="wb_obuh">WB — Обухово (транзит)</option>
+              <option value="wb_tula">WB — Тула / Владимир / Рязань</option>
+              <option value="wb_spb">WB — Шушары (Санкт-Петербург)</option>
+              <option value="wb_kaz">WB — Казань</option>
+            </optgroup>
+          </select>
+        </div>
+        <div class="calc-field"><label>Паллет в поставке</label><input type="number" id="pallets" value="2" min="1"></div>
+        <div class="calc-field"><label>Вакуумная упаковка?</label>
+          <select id="vacuum"><option value="no">Нет</option><option value="yes">Да (+30 ₽/шт)</option></select>
+        </div>
+      </div>
+      <div class="calc-results">
+        <h3>Ваш расчёт</h3>
+        <div class="calc-line"><span class="name">Приёмка товара</span><span class="val" id="r-accept">—</span></div>
+        <div class="calc-line"><span class="name">Маркировка</span><span class="val" id="r-mark">—</span></div>
+        <div class="calc-line"><span class="name">Формирование паллет</span><span class="val" id="r-pallet">—</span></div>
+        <div class="calc-line"><span class="name">Доставка на маркетплейс</span><span class="val" id="r-delivery">—</span></div>
+        <div class="calc-line" id="vac-line" style="display:none;"><span class="name">Вакуумная упаковка</span><span class="val" id="r-vac">—</span></div>
+        <div class="calc-total"><span class="tlabel">Итого за цикл</span><span class="tval" id="r-total">—</span></div>
+        <div class="calc-note">Ориентировочный расчёт. Точная стоимость зависит от категории товара и объёма. Расходные материалы — по факту.</div>
+        <a href="#contacts" class="btn-primary" style="display:block;text-align:center;margin-top:1.5rem;">Получить точный расчёт →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="pricing" style="background:#080808;">
+  <div class="section-tag">Тарифы</div>
+  <h2 class="section-title">Прозрачные цены</h2>
+  <p class="section-sub">Никаких скрытых платежей. Расчёт по факту.</p>
+  <table class="price-table">
+    <thead><tr><th style="width:45%">Услуга</th><th>Цена</th><th>Ед.</th><th>Примечание</th></tr></thead>
+    <tbody>
+      <tr class="section-row"><td colspan="4">01 — Приёмка товара</td></tr>
+      <tr><td>Поштучная приёмка (до 1 л)</td><td class="price-val">4 ₽</td><td>шт</td><td></td></tr>
+      <tr><td>Поштучная приёмка (до 5 л)</td><td class="price-val">7 ₽</td><td>шт</td><td></td></tr>
+      <tr><td>Поштучная приёмка (до 10 л)</td><td class="price-val">11 ₽</td><td>шт</td><td></td></tr>
+      <tr><td>С идентификацией (до 1 л)</td><td class="price-val">6 ₽</td><td>шт</td><td></td></tr>
+      <tr><td>Стикеровка / маркировка</td><td class="price-val">5 ₽</td><td>шт</td><td></td></tr>
+      <tr class="section-row"><td colspan="4">02 — Хранение</td></tr>
+      <tr><td>Хранение в месяц</td><td class="price-val">5 ₽</td><td>литр/мес</td><td>Первые 3 дня после приёмки — бесплатно</td></tr>
+      <tr class="section-row"><td colspan="4">03 — Упаковка</td></tr>
+      <tr><td>ПВД / ВПП (до 1 л)</td><td class="price-val">11 ₽</td><td>шт</td><td></td></tr>
+      <tr><td>ПВД / ВПП (до 5 л)</td><td class="price-val">15–16 ₽</td><td>шт</td><td></td></tr>
+      <tr><td>Укладка в курьер-пакет (до 1 л)</td><td class="price-val">6 ₽</td><td>шт</td><td></td></tr>
+      <tr><td>Сборка комплектов (до 5 шт)</td><td class="price-val">25 ₽</td><td>компл</td><td></td></tr>
+      <tr><td>Формирование паллеты</td><td class="price-val">750 ₽</td><td>паллета</td><td></td></tr>
+      <tr class="section-row"><td colspan="4">04 — Логистика Ozon</td></tr>
+      <tr class="highlight-row"><td>Кросс-докинг в СЦ Ozon</td><td class="price-val">1 000 ₽</td><td>паллета</td><td><span class="vs-badge">↓ в 3–5 раз дешевле</span></td></tr>
+      <tr><td>Ozon РФЦ (Домодедово / Ногинск / Гривно)</td><td class="price-val">3 600 ₽</td><td>паллета</td><td></td></tr>
+      <tr><td>Ozon РФЦ (Жуковский / Пушкино)</td><td class="price-val">4 320 ₽</td><td>паллета</td><td></td></tr>
+      <tr><td>Ozon Хоругвино</td><td class="price-val">5 400 ₽</td><td>паллета</td><td></td></tr>
+      <tr class="section-row"><td colspan="4">05 — Логистика Wildberries</td></tr>
+      <tr><td>WB Коледино / Электросталь</td><td class="price-val">3 000 ₽</td><td>паллета</td><td></td></tr>
+      <tr><td>WB Обухово (транзит)</td><td class="price-val">3 000 ₽</td><td>паллета</td><td></td></tr>
+      <tr><td>WB Тула / Владимир / Рязань</td><td class="price-val">5 400 ₽</td><td>паллета</td><td></td></tr>
+      <tr><td>WB Шушары / Казань</td><td class="price-val">8 000 ₽</td><td>паллета</td><td></td></tr>
+      <tr class="section-row"><td colspan="4">06 — Дополнительно</td></tr>
+      <tr><td>Фото / видео товара</td><td class="price-val">300 ₽</td><td>артикул</td><td></td></tr>
+      <tr><td>Создание заявки на поставку</td><td class="price-val">1 000 ₽</td><td>заявка</td><td></td></tr>
+    </tbody>
+  </table>
+  <div style="margin-top:1.5rem;padding:1rem 1.5rem;background:rgba(232,82,26,0.08);border:0.5px solid rgba(232,82,26,0.2);border-radius:6px;font-size:0.85rem;color:rgba(245,243,238,0.7);">
+    Объём (л) = длина × ширина × высота (см) ÷ 1000 · Минимальная партия — от 100 штук · Расходные материалы — по факту
+  </div>
+</section>
+
+<section id="how">
+  <div class="section-tag">Процесс</div>
+  <h2 class="section-title">Как мы работаем</h2>
+  <div class="steps">
+    <div class="step"><div class="step-num">1</div><h4>Заявка</h4><p>Пишете в Telegram или оставляете контакт. Рассчитываем стоимость под ваш товар.</p></div>
+    <div class="step"><div class="step-num">2</div><h4>Договор</h4><p>Официальный договор с ИП и ООО. Выдаём закрывающие документы.</p></div>
+    <div class="step"><div class="step-num">3</div><h4>Поставка</h4><p>Привозите товар или организуем забор. Принимаем, проверяем, размещаем.</p></div>
+    <div class="step"><div class="step-num">4</div><h4>Упаковка</h4><p>Маркировка, стикеровка, упаковка. Вакуумный пресс для текстиля.</p></div>
+    <div class="step"><div class="step-num">5</div><h4>Отгрузка</h4><p>Формируем паллеты, отгружаем на маркетплейс. Кросс-докинг Ozon — 30 секунд.</p></div>
+  </div>
+</section>
+
+<section style="background:var(--card-bg);">
+  <div class="section-tag">О нас</div>
+  <h2 class="section-title">Сделали под себя —<br>открыли для всех</h2>
+  <div class="whowe-inner">
+    <div class="whowe-text">
+      <p>Мы — команда Trusty Group. Начали с того, что сами продавали свой товар на Ozon и Wildberries и столкнулись с теми же проблемами, что и вы: долгая приёмка, потери товара, непрозрачные цены у фулфилментов.</p>
+      <p>Решили сделать склад под себя — и сделали правильно. Сегодня мы открыты для других селлеров. Знаем рынок маркетплейсов изнутри, понимаем что критично для ваших продаж, и делаем фулфилмент так, как хотели бы получать его сами.</p>
+      <div class="founder-card">
+        <div class="founder-avatar">А</div>
+        <div>
+          <div class="founder-name">Александр</div>
+          <div class="founder-role">Основатель Trusty Group · Селлер на Ozon и WB · 4+ года на маркетплейсах</div>
+        </div>
+      </div>
+    </div>
+    <div class="whowe-stats">
+      <div class="whowe-stat"><div class="num">4<span style="color:var(--gray);font-size:1.2rem;">+</span></div><div class="lbl">года на маркетплейсах Ozon и WB</div></div>
+      <div class="whowe-stat"><div class="num">100к<span style="color:var(--gray);font-size:1rem;">+</span></div><div class="lbl">единиц товара отгружено</div></div>
+      <div class="whowe-stat"><div class="num">0</div><div class="lbl">потерянных отправлений</div></div>
+      <div class="whowe-stat"><div class="num">30<span style="color:var(--gray);font-size:1rem;">с</span></div><div class="lbl">до сортировочного центра Ozon</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="faq" style="background:#080808;">
+  <div class="section-tag">Вопросы и ответы</div>
+  <h2 class="section-title">Часто спрашивают</h2>
+  <p class="section-sub">Если не нашли ответ — напишите в Telegram, ответим в течение 15 минут.</p>
+  <div class="faq-list">
+    <div class="faq-item"><div class="faq-q">Какой минимальный объём для старта?<span class="faq-icon">+</span></div><div class="faq-a">Работаем с партиями от 100 штук.</div></div>
+    <div class="faq-item"><div class="faq-q">Как я буду знать, что происходит с моим товаром?<span class="faq-icon">+</span></div><div class="faq-a">Менеджер пишет в чат на каждом этапе: приёмка, упаковка, отгрузка. Все процессы на складе фиксируются камерами — при любом вопросе покажем запись.</div></div>
+    <div class="faq-item"><div class="faq-q">Почему кросс-докинг Ozon у вас дешевле, чем у других?<span class="faq-icon">+</span></div><div class="faq-a">Наш склад находится в 30 секундах от сортировочного центра Ozon. Не нужна аренда машины и ожидание — просто довезли и сдали. Поэтому 1 000 ₽/паллета вместо 3 600–7 000 ₽ у конкурентов.</div></div>
+    <div class="faq-item"><div class="faq-q">Работаете ли вы с интернет-магазинами, не только с маркетплейсами?<span class="faq-icon">+</span></div><div class="faq-a">Да, работаем с розничными интернет-магазинами: приём товара, хранение, сборка заказов, упаковка и отправка через транспортные компании.</div></div>
+    <div class="faq-item"><div class="faq-q">Как происходит оплата?<span class="faq-icon">+</span></div><div class="faq-a">По факту выполненных работ. Выставляем акт, счёт и закрывающие документы с НДС.</div></div>
+    <div class="faq-item"><div class="faq-q">Что будет, если товар повредят на складе?<span class="faq-icon">+</span></div><div class="faq-a">Фиксируем состояние товара при приёмке на видео. Если повреждение по нашей вине — компенсируем. Условия прозрачно прописаны в договоре.</div></div>
+    <div class="faq-item"><div class="faq-q">Можете забрать товар с рынка или от поставщика?<span class="faq-icon">+</span></div><div class="faq-a">Да, организуем забор. Маршрут и стоимость обсуждаются индивидуально — напишите в Telegram.</div></div>
+  </div>
+</section>
+
+<section id="contacts" class="contacts-section">
+  <div class="section-tag">Контакты</div>
+  <h2 class="section-title">Давайте считать</h2>
+  <div class="contacts-grid">
+    <div>
+      <div class="contact-item"><div class="contact-icon">📍</div><div><div class="contact-label">Адрес склада</div><div class="contact-val">г. Москва, Автомобильный проезд, 10с8</div></div></div>
+      <div class="contact-item"><div class="contact-icon">✈️</div><div><div class="contact-label">Telegram — менеджер</div><div class="contact-val"><a href="https://t.me/TrustyFull" style="color:var(--accent);">@TrustyFull</a></div></div></div>
+      <div class="contact-item"><div class="contact-icon">📢</div><div><div class="contact-label">Telegram-канал</div><div class="contact-val"><a href="https://t.me/Trusty_Full" style="color:var(--accent);">@Trusty_Full</a></div></div></div>
+      <div class="contact-item"><div class="contact-icon">📸</div><div><div class="contact-label">Instagram</div><div class="contact-val">@trustyfull</div></div></div>
+      <div style="margin-top:1rem;padding:1.2rem 1.5rem;background:rgba(232,82,26,0.08);border:0.5px solid rgba(232,82,26,0.2);border-radius:8px;">
+        <div style="font-size:0.75rem;color:var(--gray);margin-bottom:0.3rem;">Первая отгрузка</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:1.8rem;">Скидка <span style="color:var(--accent);">−30%</span></div>
+        <div style="font-size:0.82rem;color:rgba(245,243,238,0.6);margin-top:0.3rem;">Оставьте заявку или напишите в Telegram</div>
+      </div>
+    </div>
+    <div class="lead-form">
+      <h3>Оставьте заявку</h3>
+      <p>Рассчитаем стоимость под ваш товар и ответим на все вопросы.</p>
+      <div id="form-body">
+        <div class="form-field"><input type="text" id="f-name" placeholder="Ваше имя"></div>
+        <div class="form-field"><input type="tel" id="f-phone" placeholder="Телефон или Telegram"></div>
+        <div class="form-field"><input type="text" id="f-comment" placeholder="Кратко о товаре (необязательно)"></div>
+        <button class="btn-primary" style="width:100%;" onclick="submitLead()">Жду звонка →</button>
+        <div class="form-privacy">Нажимая кнопку, вы соглашаетесь на обработку персональных данных. Данные используются только для связи с вами.</div>
+      </div>
+      <div class="form-success" id="form-success">Заявка принята! Свяжемся с вами в течение 15 минут.</div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="logo" style="font-size:1.2rem;">TRUSTY<span style="color:var(--accent);">.</span>FULL</div>
+  <div>г. Москва, Автомобильный проезд, 10с8</div>
+  <div>© 2026 Trusty Group</div>
+</footer>
+
+<script>
+document.querySelectorAll('.faq-q').forEach(function(q){
+  q.addEventListener('click',function(){
+    var item=this.parentElement,isOpen=item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(function(i){i.classList.remove('open');});
+    if(!isOpen)item.classList.add('open');
+  });
+});
+
+function fmtRub(n){return Math.round(n).toLocaleString('ru-RU')+' ₽';}
+function calc(){
+  var qty=parseInt(document.getElementById('qty').value)||0;
+  var vol=parseFloat(document.getElementById('vol').value)||0;
+  var mp=document.getElementById('mp').value;
+  var pallets=parseInt(document.getElementById('pallets').value)||1;
+  var vac=document.getElementById('vacuum').value;
+  var ap=vol<=1?4:vol<=5?7:11;
+  var at=qty*ap, mt=qty*5, pt=pallets*750;
+  var dm={ozon_cross:1000,ozon_dom:3600,ozon_zhuk:4320,ozon_hor:5400,wb_kol:3000,wb_obuh:3000,wb_tula:5400,wb_spb:8000,wb_kaz:8000};
+  var dt=pallets*dm[mp], vt=vac==='yes'?qty*30:0;
+  document.getElementById('r-accept').textContent=fmtRub(at);
+  document.getElementById('r-mark').textContent=fmtRub(mt);
+  document.getElementById('r-pallet').textContent=fmtRub(pt);
+  document.getElementById('r-delivery').textContent=fmtRub(dt);
+  var vl=document.getElementById('vac-line');
+  if(vac==='yes'){vl.style.display='flex';document.getElementById('r-vac').textContent=fmtRub(vt);}else{vl.style.display='none';}
+  document.getElementById('r-total').textContent=fmtRub(at+mt+pt+dt+vt);
+}
+['qty','vol','mp','pallets','vacuum'].forEach(function(id){document.getElementById(id).addEventListener('input',calc);});
+calc();
+
+// ВСТАВЬТЕ СЮДА URL вашего Google Apps Script после настройки
+var SHEET_URL='https://script.google.com/macros/s/AKfycbwPObBt94fd2offGdLgP--otGKYHirBc-NrAjvVrnvPHcaaCDKLygexHz3B29HankOh6g/exec';
+function submitLead(){
+  var name=document.getElementById('f-name').value.trim();
+  var phone=document.getElementById('f-phone').value.trim();
+  if(!name||!phone){alert('Пожалуйста, укажите имя и телефон');return;}
+  var btn=document.querySelector('.lead-form button');
+  btn.textContent='Отправляем...';btn.disabled=true;
+  var data=new FormData();
+  data.append('name',name);
+  data.append('phone',phone);
+  data.append('comment',document.getElementById('f-comment').value.trim());
+  data.append('date',new Date().toLocaleString('ru-RU'));
+  data.append('source','Сайт');
+  fetch(SHEET_URL,{method:'POST',body:data})
+    .then(function(){document.getElementById('form-body').style.display='none';document.getElementById('form-success').style.display='block';})
+    .catch(function(){document.getElementById('form-body').style.display='none';document.getElementById('form-success').style.display='block';});
+}
+</script>
+</body>
+</html>
